@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table, th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Accelerometer x-axis</th>
+        <th>Accelerometer y-axis</th>
+        <th>Accelerometer z-axis</th>
+        <th>Gyroscope x-axis</th>
+        <th>Gyroscope y-axis</th>
+        <th>Gyroscope z-axis</th>
+        <th>Time</th>
+    </tr>
+    {% for record in records %}
+        <tr>
+            <td>{{ record.accel_x }}</td>
+            <td>{{ record.accel_y }}</td>
+            <td>{{ record.accel_z }}</td>
+            <td>{{ record.gyro_x }}</td>
+            <td>{{ record.gyro_y }}</td>
+            <td>{{ record.gyro_z }}</td>
+            <td>{{ record.time }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
