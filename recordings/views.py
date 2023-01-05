@@ -34,13 +34,6 @@ def record_data(request, record_id):
     return render(request, 'recordings/record_data.html', {'records': recording_data})
 
 
-# path('records/<int:record_id>/', views.record_data, name='record_data'),
-
-
-# ./cloud_sql_proxy -instances="baigiamasis-darbas-373611:europe-north1:namudarbas"=tcp:5432
-# export GOOGLE_CLOUD_PROJECT=baigiamasis-darbas-373611
-# export USE_CLOUD_SQL_AUTH_PROXY=true
-
 @api_view(['POST'])
 def post_recording(request):
     record = request.data
