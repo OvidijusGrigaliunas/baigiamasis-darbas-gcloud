@@ -3,12 +3,12 @@ from django.http import HttpResponse
 from .forms import UserLoginForm, UserRegisterForm, UserDataForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from recordings.models import User
+from recordings.models import User as User_Data
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'web/index.html')
+    return render(request, 'user_login/index.html')
 
 
 def login_user(request):
@@ -21,11 +21,11 @@ def login_user(request):
             return redirect('page_reloader')
         return HttpResponse('Incorrect username or password')
     form = UserLoginForm()
-    return render(request, 'web/login.html', {'form': form})
+    return render(request, 'user_login/login.html', {'form': form})
 
 
 def page_reloader(request):
-    return render(request, 'web/page_reloader.html')
+    return render(request, 'user_login/page_reloader.html')
 
 
 def register_user(request):
@@ -39,7 +39,7 @@ def register_user(request):
         message = "<p class='text-center'>Something went wrong</p>"
         return HttpResponse(message)
     form = UserRegisterForm()
-    return render(request, 'web/register.html', {'form': form})
+    return render(request, 'user_login/register.html', {'form': form})
 
 
 @login_required(login_url='')
@@ -50,7 +50,7 @@ def logout_user(request):
 
 @login_required(login_url='')
 def user_profile(request):
-    return render(request, 'web/user_settings.html', {'user': request.user.username})
+    return render(request, 'user_login/user_settings.html', {'user': request.user.username})
 
 
 @login_required(login_url='')
@@ -61,19 +61,19 @@ def personal_settings(request):
         form = UserDataForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            obj, created = User.objects.update_or_create(
+            obj, created = User_Data.objects.update_or_create(
                 user=current_user, defaults={'weight': form_data['weight'],
                                              'height': form_data['height'],
                                              'birthdate': form_data['birthdate']})
-    user_data = User.objects.filter(user=current_user)
+    user_data = User_Data.objects.filter(user=current_user)
     if user_data.exists():
         user_data_values = user_data.values()[0]
         form = UserDataForm(initial={'weight': user_data_values['weight'],
                                      'height': user_data_values['height'], 'birthdate': user_data_values['birthdate']})
     else:
         form = UserDataForm()
-    return render(request, 'web/personal_settings.html', {'form': form})
+    return render(request, 'user_login/personal_settings.html', {'form': form})
 
 
 def home_page(request):
-    return render(request, 'web/home_page.html')
+    return render(request, 'user_login/home_page.html')

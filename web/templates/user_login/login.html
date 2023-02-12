@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="grid place-items-center bg-gray-800">
+    <form class="mb-4 px-8 pb-8"
+          hx-post="/login"
+          hx-target="#error_msg">
+        {% csrf_token %}
+        <fieldset>
+            {% for field in form %}
+                <label class="text-white">{{ field.label }}</label>
+                {{ field }}
+            {% endfor %}
+            <div class="grid place-items-center">
+                <input class="mt-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none"
+                       type="submit" value="Login">
+            </div>
+        </fieldset>
+        <div id="error_msg" class="text-center text-white"></div>
+
+    </form>
+</div>
+</body>
+</html>
