@@ -19,7 +19,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("", include("recordings.urls")),
-    path("admin/", admin.site.urls),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+                  path("recordings", include("recordings.urls")),
+                  path("admin/", admin.site.urls),
+                  path('', include('web.urls')),
+                  path("__reload__/", include("django_browser_reload.urls")),
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # [END gaestd_py_django_local_static]

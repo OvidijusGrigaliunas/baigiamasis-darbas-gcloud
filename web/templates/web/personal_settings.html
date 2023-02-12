@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal settings</title>
+</head>
+<body>
+<div class="grid place-items-center">
+    <form class="px-8 pb-8"
+          hx-post="personal_settings"
+          hx-target="#settings_container">
+        {% csrf_token %}
+        <fieldset>
+            {{ form }}
+            <div class="grid place-items-center">
+                <input class="mt-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none"
+                       type="submit" value="Save">
+            </div>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
