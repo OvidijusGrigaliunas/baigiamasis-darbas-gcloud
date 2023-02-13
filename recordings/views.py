@@ -18,9 +18,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Record, Record_Data, User, Category
 from django.utils import timezone
-from datetime import datetime
-from .serializers import RecordSerializer, RecordDataSerializer
-import json
+
 
 
 def index(request):

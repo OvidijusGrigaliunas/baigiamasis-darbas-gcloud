@@ -5,22 +5,24 @@
     <title>Settings</title>
 </head>
 <body>
-<div class="flex flex-row flex-grow overflow-auto w-full ">
-    <nav class="bg-gray-800 flex-grow overflow-auto text-xl w-96 border-solid border-2 border-gray-500 ">
-        <div x-data="{selected: 1}" class="select-none flex flex-col py-2 ">
+<div class="flex flex-row w-full h-screen">
+    <div class="h-full w-64 bg-gray-800 text-white">
+        <nav x-data="{selected: 1}">
             <a x-cloak href="#" hx-get="personal_settings" hx-target="#settings_container"
                x-show="selected != 1" x-on:click="selected = 1"
-               class="pt-4 px-2 border-solid border-b-2 border-gray-500 hover:text-white hover:font-bold">
+               class="block p-3 hover:bg-gray-700 text-white border border-white">
                 Personal</a>
             <a x-cloak x-show="selected == 1"
-               class="pt-4 px-2 border-solid border-b-2 border-gray-500 text-white font-bold">
+               class="block p-3 bg-gray-700 text-white border border-white">
                 Personal</a>
-        </div>
-    </nav>
-    <div  hx-get="personal_settings" hx-trigger="load" id="settings_container" class="flex-grow overflow-auto w-full">
+
+        </nav>
+    </div>
+    <div hx-get="personal_settings" hx-trigger="load" id="settings_container" class="flex-grow overflow-auto">
 
     </div>
 </div>
+
 
 </body>
 </html>

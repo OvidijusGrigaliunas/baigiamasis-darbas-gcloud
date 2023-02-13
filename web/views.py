@@ -3,12 +3,12 @@ from django.http import HttpResponse
 from .forms import UserLoginForm, UserRegisterForm, UserDataForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from recordings.models import User as User_Data
+from recordings.models import User as User_Data, Record
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'user_login/index.html')
+    return render(request, 'web/index.html')
 
 
 def login_user(request):
@@ -21,11 +21,11 @@ def login_user(request):
             return redirect('page_reloader')
         return HttpResponse('Incorrect username or password')
     form = UserLoginForm()
-    return render(request, 'user_login/login.html', {'form': form})
+    return render(request, 'web/login.html', {'form': form})
 
 
 def page_reloader(request):
-    return render(request, 'user_login/page_reloader.html')
+    return render(request, 'web/page_reloader.html')
 
 
 def register_user(request):
@@ -39,7 +39,7 @@ def register_user(request):
         message = "<p class='text-center'>Something went wrong</p>"
         return HttpResponse(message)
     form = UserRegisterForm()
-    return render(request, 'user_login/register.html', {'form': form})
+    return render(request, 'web/register.html', {'form': form})
 
 
 @login_required(login_url='')
@@ -50,7 +50,7 @@ def logout_user(request):
 
 @login_required(login_url='')
 def user_profile(request):
-    return render(request, 'user_login/user_settings.html', {'user': request.user.username})
+    return render(request, 'web/user_settings.html', {'user': request.user.username})
 
 
 @login_required(login_url='')
@@ -72,8 +72,18 @@ def personal_settings(request):
                                      'height': user_data_values['height'], 'birthdate': user_data_values['birthdate']})
     else:
         form = UserDataForm()
-    return render(request, 'user_login/personal_settings.html', {'form': form})
+    return render(request, 'web/personal_settings.html', {'form': form})
 
 
 def home_page(request):
-    return render(request, 'user_login/home_page.html')
+    return render(request, 'web/home_page.html')
+
+
+@login_required(login_url='')
+def statistics_page(request):
+    current_user = request.user
+    records = Record.objects.filter(user=current_user.id).values()
+    record_data = []
+    for record in records:
+        record_data.append({'date': record['record_date'], 'id': record['id']})
+    return render(request, 'web/statistics.html', {'record_data': record_data})

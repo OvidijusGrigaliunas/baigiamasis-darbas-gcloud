@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<!-- TODO add alpine and htmx -->
+<div class="flex flex-row w-full h-screen">
+    <div class="h-full w-64 bg-gray-800 text-white">
+        <nav>
+            <a class="block p-3 hover:bg-gray-700 text-white border border-white" href="#">Recordings</a>
+            <a class="block p-3 hover:bg-gray-700 text-white border border-white" href="#">Visual data</a>
+        </nav>
+    </div>
+    <div class="flex text-white overflow-y-scroll h-screen bg-gray-700 w-96 flex-col">
+        {% for record in record_data %}
+            <a hx-get="recordings/record/{{record.id }}/" hx-target="#record_data_container"
+               class="text-lg font-bold p-2 border-white border-b border-t w-full hover:bg-gray-600"
+               href="#">{{ record.date }}</a>
+        {% endfor %}
+
+    </div>
+    <div id="record_data_container" class="flex-grow"></div>
+</div>
+</body>
+</html>

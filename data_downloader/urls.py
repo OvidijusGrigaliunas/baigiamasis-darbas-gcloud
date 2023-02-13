@@ -12,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gaestd_py_django_local_static]
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 
+from . import views
+
+app_name = 'data_downloader'
 urlpatterns = [
-                  path("recordings/", include("recordings.urls")),
-                  path("admin/", admin.site.urls),
-                  path('', include('web.urls')),
-                  path("data-downloader/", include("data_downloader.urls")),
-              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-# [END gaestd_py_django_local_static]
+    path('', views.index, name='data_download'),
+    path('data_download_url', views.data_download_url, name='download_data')
+]

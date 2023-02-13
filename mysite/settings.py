@@ -23,7 +23,7 @@ from google.cloud import secretmanager
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # [START gaestd_py_django_secret_config]
-env = environ.Env(DEBUG=(bool, False))
+env = environ.Env(DEBUG=(bool, True))
 env_file = os.path.join(BASE_DIR, ".env")
 
 if os.path.isfile(env_file):
@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     "recordings",
     "rest_framework",
     "web",
+    'data_downloader',
 
 ]
 

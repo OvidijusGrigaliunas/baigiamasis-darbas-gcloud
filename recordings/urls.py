@@ -14,11 +14,10 @@
 
 from django.urls import path
 
-from recordings import views
+from . import views
 
-app_name = 'polls'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('records/<int:record_id>/', views.record_data, name='record_data'),
-    path('postrecord', views.post_recording, name='postRecording')
+    path('', views.index, name='recordings'),
+    path('record/<int:record_id>/', views.record_data, name='record_data'),
+    path('postrecord/', views.post_recording, name='postRecording')
 ]
