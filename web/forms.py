@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.safestring import mark_safe
 
+
 class UserLoginForm(forms.Form):
     tailwind_class = """
-    block text-gray-700 text-sm font-bold mb-2
+        block text-gray-700 text-5xl lg:text-lg font-bold mb-16 lg:mb-4
     """
     username = forms.CharField(label=mark_safe('<br /> User:'), widget=forms.TextInput(attrs={
         'class': tailwind_class
@@ -24,13 +25,13 @@ class UserRegisterForm(UserCreationForm):
         super(UserRegisterForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = """
-                        block text-gray-700 text-sm font-bold mb-2
+                            block text-gray-700 text-5xl lg:text-lg font-bold mb-16 lg:mb-4
                         """
 
 
 class UserDataForm(forms.Form):
     tailwind_class = """
-            block text-gray-700 text-sm font-bold mb-2
+                block text-gray-700 text-5xl lg:text-lg font-bold mb-16 lg:mb-4
             """
     height = forms.FloatField(label=mark_safe('<br /> Height:'), widget=forms.NumberInput(attrs={
         'class': tailwind_class

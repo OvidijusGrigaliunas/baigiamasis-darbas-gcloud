@@ -12,4 +12,5 @@ urlpatterns = [
     path('personal_settings', views.personal_settings, name='personal_settings'),
     path('reload_page', views.page_reloader, name='page_reloader'),
     path('statistics', views.statistics_page, name='statistics_page'),
+    path('register_app', views.register_app, name='register_app')
 ]

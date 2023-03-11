@@ -41,6 +41,19 @@ def register_user(request):
     form = UserRegisterForm()
     return render(request, 'web/register.html', {'form': form})
 
+def register_app(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "<p class='text-center'>Successful registration</p>"
+            return HttpResponse(message)
+        # TODO Prideti info kai bloga form
+        message = "<p class='text-center'>Something went wrong</p>"
+        return HttpResponse(message)
+    form = UserRegisterForm()
+    return render(request, 'web/register_app.html', {'form': form})
+
 
 @login_required(login_url='')
 def logout_user(request):

@@ -2,32 +2,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Main</title>
     <meta charset="UTF-8">
-    <script src="{% static 'htmx.min.js' %}"></script>
-    <script src="{% static 'alpinejscollapse.min.js' %}" defer></script>
-    <script src="{% static 'alpinejs.min.js' %}" defer></script>
     <link href="{% static 'styles.css' %}" rel="stylesheet">
+    <script src="{% static 'htmx.min.js' %}"></script>
 </head>
 <body>
-<div class="grid place-items-center border-b-2 border-solid border-gray-300 bg-gray-800">
-    <form class="mb-4 rounded px-8 pt-8 pb-8 shadow-md"
-          hx-post="/register"
+<div class="grid place-items-center h-screen w-full bg-gray-800">
+    <form class="my-8 mb-8 lg:mb-4 lg:px-8 lg:pb-8"
+          hx-post="/register_app"
           hx-target="#reg_message">
         {% csrf_token %}
         <fieldset>
             {% for field in form %}
-                <label class="text-white">{{ field.label }}</label>
+                <label class="mb-2 text-5xl text-white lg:text-lg">{{ field.label }}:</label>
                 {{ field }}
+                <br><br>
+
             {% endfor %}
             <div class="grid place-items-center">
-                <input class="mt-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none"
+                <input class="mt-8 rounded bg-blue-500 px-16 py-4 text-5xl font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none lg:mt-4 lg:px-4 lg:py-2 lg:text-lg"
                        type="submit" value="Register">
             </div>
         </fieldset>
         <div id="reg_message" class="text-white"></div>
     </form>
 </div>
+
 
 </body>
 </html>

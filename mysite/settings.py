@@ -93,7 +93,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "web",
     'data_downloader',
-
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +125,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "mysite.wsgi.application"
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 # Database
 # [START db_setup]
 # [START gaestd_py_django_database_config]

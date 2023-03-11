@@ -7,15 +7,16 @@
     <script src="{% static 'htmx.min.js' %}"></script>
     <script src="{% static 'alpinejscollapse.min.js' %}" defer></script>
     <script src="{% static 'alpinejs.min.js' %}" defer></script>
+    <script src="{% static 'chartjs.min.js' %}"></script>
     <link href="{% static 'styles.css' %}" rel="stylesheet">
 </head>
 <body>
 <div id="app" x-data="{selected: 1}" class="flex h-screen w-full flex-col overflow-hidden">
-    <nav class="flex justify-center fixed items-center h-24 md:h-12 md:text-lg text-xl w-full border-b-2 border-solid border-gray-500 bg-gray-800 text-white">
-        <div class="flex select-none items-stretch justify-center">
+    <nav class="fixed flex h-24 w-full items-center justify-center border-b-2 border-solid border-gray-500 bg-gray-800 text-xl text-white lg:h-12 lg:text-lg">
+        <div class="flex select-none items-stretch justify-center text-4xl lg:text-xl">
             <a x-cloak href="#" hx-get="home_page" hx-target="#content_container"
                x-show.important="selected != 1" x-on:click="selected = 1"
-               class=" border-b-2 border-solid border-gray-500 px-4 hover:border-white">
+               class="border-b-2 border-solid border-gray-500 px-4 hover:border-white">
                 Home</a>
             <a x-cloak x-show.important="selected == 1"
                class="border-b-2 border-solid border-white px-4">
@@ -67,14 +68,15 @@
     </nav>
     {% if not request.user.is_authenticated %}
         <div id="login_form" x-cloak x-show="selected == 5" hx-get="login" hx-trigger="load"
-             x-collapse.duration.500ms class="fixed mt-24 lg:mt-12 w-full">
+             x-collapse.duration.500ms class="fixed mt-24 w-full lg:mt-12">
         </div>
         <div id="register" x-cloak x-show="selected == 6" hx-get="register" hx-trigger="load"
-             x-collapse.duration.500ms class="fixed mt-24 lg:mt-12 w-full">
+             x-collapse.duration.500ms class="fixed mt-24 w-full lg:mt-12">
         </div>
     {% endif %}
 
-    <div class="flex flex-grow flex-col overflow-hidden bg-zinc-200 pt-24 lg:pt-12" hx-get="/home_page" hx-trigger="load"
+    <div class="flex flex-grow flex-col overflow-hidden bg-zinc-200 pt-24 lg:pt-12" hx-get="/home_page"
+         hx-trigger="load"
          id="content_container">
     </div>
 </div>
@@ -82,6 +84,7 @@
 
 </body>
 <script>
+    let ctx;
     document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     })
