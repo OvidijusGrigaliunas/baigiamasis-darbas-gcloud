@@ -1,36 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        table, th, td {
-            border: 1px solid;
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+
+<script>
+    ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
+            datasets: [{
+                label: 'Velocity x',
+                data: [{%for record in records%}'{{record.accel_x}}',{%endfor%}],
+                borderWidth: 1
+            },
+                {
+                    label: 'Velocity y',
+                    data: [{%for record in records%}'{{record.accel_y}}',{%endfor%}],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Velocity z',
+                    data: [{%for record in records%}'{{record.accel_z}}',{%endfor%}],
+                    borderWidth: 1
+                }]
+        },
+        options: {
+            responsive: true,
+            fill: false,
+            interaction: {
+                intersect: false
+            },
+            radius: 0,
         }
-    </style>
-</head>
-<body>
-<table>
-    <tr>
-        <th>Accelerometer x-axis</th>
-        <th>Accelerometer y-axis</th>
-        <th>Accelerometer z-axis</th>
-        <th>Gyroscope x-axis</th>
-        <th>Gyroscope y-axis</th>
-        <th>Gyroscope z-axis</th>
-        <th>Time</th>
-    </tr>
-    {% for record in records %}
-        <tr>
-            <td>{{ record.accel_x }}</td>
-            <td>{{ record.accel_y }}</td>
-            <td>{{ record.accel_z }}</td>
-            <td>{{ record.gyro_x }}</td>
-            <td>{{ record.gyro_y }}</td>
-            <td>{{ record.gyro_z }}</td>
-            <td>{{ record.time }}</td>
-        </tr>
-    {% endfor %}
-</table>
-</body>
-</html>
+    });
+</script>
+
+
+

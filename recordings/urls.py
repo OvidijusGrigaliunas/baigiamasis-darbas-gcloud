@@ -17,7 +17,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='recordings'),
+    path('', views.index, name='record'),
     path('record/<int:record_id>/', views.record_data, name='record_data'),
     path('postrecord/', views.post_recording, name='postRecording')
 ]

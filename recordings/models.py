@@ -34,6 +34,7 @@ class Record(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     record_date = models.DateTimeField()
+    data_interval = models.IntegerField()
 
 
 class Record_Data(models.Model):
@@ -44,4 +45,6 @@ class Record_Data(models.Model):
     accel_x = models.DecimalField(max_digits=13, decimal_places=9)
     accel_y = models.DecimalField(max_digits=13, decimal_places=9)
     accel_z = models.DecimalField(max_digits=13, decimal_places=9)
-    time = models.PositiveBigIntegerField()
+    magnet_x = models.DecimalField(max_digits=13, decimal_places=9)
+    magnet_y = models.DecimalField(max_digits=13, decimal_places=9)
+    magnet_z = models.DecimalField(max_digits=13, decimal_places=9)

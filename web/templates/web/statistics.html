@@ -3,15 +3,19 @@
 <body>
 <!-- TODO add alpine and htmx -->
 <div class="flex h-screen w-full flex-row">
-    <div class="h-full w-64 bg-gray-800 text-white">
-        <nav>
-            <a class="block border border-white p-3 text-white hover:bg-gray-700" href="#">Recordings</a>
-            <a class="block border border-white p-3 text-white hover:bg-gray-700" href="#">Visual data</a>
-        </nav>
-    </div>
-    <div class="flex h-screen w-96 flex-col overflow-y-scroll bg-gray-700 text-white">
+    <!--
+
+<div class="h-full w-64 bg-gray-800 text-white">
+    <nav>
+        <a class="block border border-white p-3 text-white hover:bg-gray-700" href="#">Recordings</a>
+        <a class="block border border-white p-3 text-white hover:bg-gray-700" href="#">Visual data</a>
+    </nav>
+</div>
+        -->
+
+    <div class="flex h-screen w-64 flex-col overflow-y-scroll bg-gray-800 text-white">
         {% for record in record_data %}
-            <a hx-get="recordings/record/{{record.id }}/" hx-target="#record_data_container"
+            <a hx-get="recordings/record/{{ record.id }}/" hx-target="#record_data_container"
                class="w-full border-t border-b border-white p-2 text-lg font-bold hover:bg-gray-600"
                href="#">{{ record.date }}</a>
         {% endfor %}
