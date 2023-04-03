@@ -21,6 +21,7 @@ from .models import Record, Record_Data, User, Category
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from .utils import get_accelerometer_speed
+import json
 
 
 def index(request):
@@ -32,7 +33,7 @@ def index(request):
 # TODO: Pritaikyti naujiem duomenim
 def record_data(request, record_id):
     recordings_data = Record_Data.objects.filter(record_id=record_id).values()
-    data_interval = Record.objects.get(id=record_id).values('data_interval')['data_interval']
+    data_interval = Record.objects.values('data_interval').get(id=record_id)['data_interval']
     accelerometer_speed = get_accelerometer_speed(recordings_data.values("accel_x", "accel_y", "accel_z"),
                                                   data_interval)
     time_in_seconds = []
@@ -51,16 +52,14 @@ def record_data(request, record_id):
 @api_view(['POST'])
 def post_recording(request):
     try:
-        record = request.data['data']
+        record = json.loads(request.data['data'])
         user_id = Token.objects.values('user_id').get(key=record['token'])
-        print(user_id)
         cur_user = User.objects.get(id=user_id['user_id'])
         cur_category = Category.objects.get(id=1)
         new_record = Record(user=cur_user, category=cur_category, record_date=timezone.now(), data_interval=100)
         new_record.save()
         cur_record = Record.objects.get(id=new_record.id)
         recorded_data = []
-
         for n in range(0, len(record['accelerometerData'])):
             recorded_data.append({'accel': record['accelerometerData'][n],
                                   'gyro': record['gyroscopeData'][n],
@@ -78,12 +77,8 @@ def post_recording(request):
                                           magnet_z=data_row['magnet']['z'],
                                           )
             new_record_data.save()
+        print('Success')
         return Response('Success')
-    except ValueError as e:
-        return Response('a')
-    except AttributeError as e:
-        return Response('a')
-    except TypeError as e:
-        return Response('a')
-    except TimeoutError as e:
-        return Response('a')
+    except Exception as e:
+        print(e)
+        return Response('Gyvenimas sunkus :(')

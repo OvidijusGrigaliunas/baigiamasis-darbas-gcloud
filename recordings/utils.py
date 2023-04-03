@@ -3,7 +3,6 @@ import decimal
 
 def get_accelerometer_speed(accel_data, time_step):
     g = decimal.Decimal(9.8)
-    print(g)
     time_step = round(decimal.Decimal(time_step), 2)
     accel_speed = {"x": [], "y": [], "z": []}
     accel_speed["x"].append(accel_data[0]["accel_x"] * time_step)
