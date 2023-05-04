@@ -48,7 +48,6 @@ def register_app(request):
             form.save()
             message = "<p class='text-center'>Successful registration</p>"
             return HttpResponse(message)
-        # TODO Prideti info kai bloga form
         message = "<p class='text-center'>Something went wrong</p>"
         return HttpResponse(message)
     form = UserRegisterForm()

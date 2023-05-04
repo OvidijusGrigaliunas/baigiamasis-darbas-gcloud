@@ -1,28 +1,103 @@
 <div>
-    <canvas id="myChart"></canvas>
+    <button hx-get="recordings/delete_record/{{ record_id }}/" hx-trigger="click" hx-target="#content_container"
+            class="mt-8 rounded bg-blue-500 px-16 py-4 text-5xl font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none lg:mt-4 lg:px-4 lg:py-2 lg:text-lg"
+    >Delete</button>
+    <div class="w-full lg:grid lg:grid-cols-2 lg:gap-2">
+        <div>
+            <h1>Accelerometer</h1>
+            <canvas id="accel_chart"></canvas>
+        </div>
+        <div><h1>Gyroscope</h1>
+            <canvas id="gyro_chart"></canvas>
+        </div>
+        <div><h1>Magnetometer</h1>
+            <canvas id="magnet_chart"></canvas>
+        </div>
+    </div>
+
 </div>
 
 
 <script>
-    ctx = document.getElementById('myChart');
+    ctx1 = document.getElementById('accel_chart');
+    ctx2 = document.getElementById('gyro_chart');
+    ctx3 = document.getElementById('magnet_chart');
 
-    new Chart(ctx, {
+    new Chart(ctx1, {
         type: 'line',
         data: {
             labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
             datasets: [{
-                label: 'Velocity x',
+                label: 'x',
                 data: [{%for record in records%}'{{record.accel_x}}',{%endfor%}],
                 borderWidth: 1
             },
                 {
-                    label: 'Velocity y',
+                    label: 'y',
                     data: [{%for record in records%}'{{record.accel_y}}',{%endfor%}],
                     borderWidth: 1
                 },
                 {
-                    label: 'Velocity z',
+                    label: 'z',
                     data: [{%for record in records%}'{{record.accel_z}}',{%endfor%}],
+                    borderWidth: 1
+                }]
+        },
+        options: {
+            responsive: true,
+            fill: false,
+            interaction: {
+                intersect: false
+            },
+            radius: 0,
+        }
+    });
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
+            datasets: [{
+                label: 'x',
+                data: [{%for record in records%}'{{record.gyro_x}}',{%endfor%}],
+                borderWidth: 1
+            },
+                {
+                    label: 'y',
+                    data: [{%for record in records%}'{{record.gyro_y}}',{%endfor%}],
+                    borderWidth: 1
+                },
+                {
+                    label: 'z',
+                    data: [{%for record in records%}'{{record.gyro_z}}',{%endfor%}],
+                    borderWidth: 1
+                }]
+        },
+        options: {
+            responsive: true,
+            fill: false,
+            interaction: {
+                intersect: false
+            },
+            radius: 0,
+        }
+    });
+    new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
+            datasets: [{
+                label: 'x',
+                data: [{%for record in records%}'{{record.magnet_x}}',{%endfor%}],
+                borderWidth: 1
+            },
+                {
+                    label: 'y',
+                    data: [{%for record in records%}'{{record.magnet_y}}',{%endfor%}],
+                    borderWidth: 1
+                },
+                {
+                    label: 'z',
+                    data: [{%for record in records%}'{{record.magnet_z}}',{%endfor%}],
                     borderWidth: 1
                 }]
         },

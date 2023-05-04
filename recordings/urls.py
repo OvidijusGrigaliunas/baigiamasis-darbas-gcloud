@@ -19,5 +19,8 @@ from . import views
 urlpatterns = [
     path('', views.index, name='record'),
     path('record/<int:record_id>/', views.record_data, name='record_data'),
-    path('postrecord/', views.post_recording, name='postRecording')
+    path('delete_record/<int:record_id>/', views.delete_record, name='delete_record'),
+    path('postrecord/', views.post_recording, name='postRecording'),
+    path('postrecordextra/', views.post_recording_extra, name='postRecordingExtra')
+
 ]
