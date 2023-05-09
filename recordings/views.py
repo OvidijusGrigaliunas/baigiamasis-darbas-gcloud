@@ -71,37 +71,46 @@ def record_data(request, record_id):
 
 @api_view(['POST'])
 def post_recording(request):
-    try:
-        record = json.loads(request.data['data'])
-        user_id = Token.objects.values('user_id').get(key=record['token'])
-        cur_user = User.objects.get(id=user_id['user_id'])
-        cur_category = Category.objects.get(id=1)
-        new_record = Record(user=cur_user, category=cur_category, record_date=timezone.now(), data_interval=100)
-        new_record.save()
-        cur_record = Record.objects.get(id=new_record.id)
-        recorded_data = []
-        for n in range(0, len(record['accelerometerData'])):
-            recorded_data.append({'accel': record['accelerometerData'][n],
-                                  'gyro': record['gyroscopeData'][n],
-                                  'magnet': record['magnetometerData'][n]})
-        for data_row in recorded_data:
-            new_record_data = Record_Data(record=cur_record,
-                                          accel_x=data_row['accel']['x'],
-                                          accel_y=data_row['accel']['y'],
-                                          accel_z=data_row['accel']['z'],
-                                          gyro_x=data_row['gyro']['x'],
-                                          gyro_y=data_row['gyro']['y'],
-                                          gyro_z=data_row['gyro']['z'],
-                                          magnet_x=data_row['magnet']['x'],
-                                          magnet_y=data_row['magnet']['y'],
-                                          magnet_z=data_row['magnet']['z'],
-                                          )
-            new_record_data.save()
-        print('Success')
-        return Response('Success')
-    except Exception as e:
-        print(e)
-        return Response('Gyvenimas sunkus :(')
+    record = json.loads(request.data['data'])
+    user_id = Token.objects.values('user_id').get(key=record['token'])
+    cur_user = User.objects.get(id=user_id['user_id'])
+    cur_category = Category.objects.get(id=1)
+    new_record = Record(user=cur_user, category=cur_category, record_date=timezone.now(),
+                        data_interval=record['interval'])
+    new_record.save()
+    cur_record = Record.objects.get(id=new_record.id)
+    recorded_data = []
+    for n in range(0, len(record['accelerometerData'])):
+        recorded_data.append({})
+        try:
+            recorded_data[n]['accel'] = record['accelerometerData'][n]
+        except IndexError as e:
+            recorded_data[n]['accel'] = {'x': None, 'y': None, 'z': None}
+        try:
+            recorded_data[n]['gyro'] = record['gyroscopeData'][n]
+        except IndexError as e:
+            recorded_data[n]['gyro'] = {'x': None, 'y': None, 'z': None}
+        try:
+            recorded_data[n]['magnet'] = record['magnetometerData'][n]
+        except IndexError as e:
+            recorded_data[n]['magnet'] = {'x': None, 'y': None, 'z': None}
+
+    for data_row in recorded_data:
+        print(data_row)
+        new_record_data = Record_Data(record=cur_record,
+                                      accel_x=data_row['accel']['x'],
+                                      accel_y=data_row['accel']['y'],
+                                      accel_z=data_row['accel']['z'],
+                                      gyro_x=data_row['gyro']['x'],
+                                      gyro_y=data_row['gyro']['y'],
+                                      gyro_z=data_row['gyro']['z'],
+                                      magnet_x=data_row['magnet']['x'],
+                                      magnet_y=data_row['magnet']['y'],
+                                      magnet_z=data_row['magnet']['z'],
+                                      )
+        new_record_data.save()
+    print('Success')
+    return Response('Success')
 
 
 @api_view(['POST'])

@@ -39,15 +39,15 @@ class Record(models.Model):
 
 class Record_Data(models.Model):
     record = models.ForeignKey(Record, on_delete=models.CASCADE)
-    gyro_x = models.DecimalField(max_digits=13, decimal_places=9)
-    gyro_y = models.DecimalField(max_digits=13, decimal_places=9)
-    gyro_z = models.DecimalField(max_digits=13, decimal_places=9)
-    accel_x = models.DecimalField(max_digits=13, decimal_places=9)
-    accel_y = models.DecimalField(max_digits=13, decimal_places=9)
-    accel_z = models.DecimalField(max_digits=13, decimal_places=9)
-    magnet_x = models.DecimalField(max_digits=13, decimal_places=9)
-    magnet_y = models.DecimalField(max_digits=13, decimal_places=9)
-    magnet_z = models.DecimalField(max_digits=13, decimal_places=9)
+    gyro_x = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    gyro_y = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    gyro_z = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    accel_x = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    accel_y = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    accel_z = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    magnet_x = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    magnet_y = models.DecimalField(max_digits=13, decimal_places=9, null=True)
+    magnet_z = models.DecimalField(max_digits=13, decimal_places=9, null=True)
 
 
 class Record_Data_Extra(models.Model):
