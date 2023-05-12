@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import UserLoginForm, UserRegisterForm, UserDataForm
+from .forms import UserLoginForm, UserRegisterForm, UserDataForm, DateSelectionForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from recordings.models import User as User_Data, Record
+from datetime import datetime
+from .utils import get_admin_dashboard_stats
 
 
 # Create your views here.
@@ -40,6 +42,7 @@ def register_user(request):
         return HttpResponse(message)
     form = UserRegisterForm()
     return render(request, 'web/register.html', {'form': form})
+
 
 def register_app(request):
     if request.method == 'POST':
@@ -99,3 +102,21 @@ def statistics_page(request):
     for record in records:
         record_data.append({'date': record['record_date'], 'id': record['id']})
     return render(request, 'web/statistics.html', {'record_data': record_data})
+
+
+@login_required(login_url='')
+def admin_dashboard(request):
+    if request.user.username == 'admin':
+        filter = {'from': datetime.today().strftime('%Y-%m-%d'), 'to': datetime.today().strftime('%Y-%m-%d')}
+        if request.method == 'POST':
+            form = DateSelectionForm(request.POST)
+            if form.is_valid():
+                form_data: dict = form.cleaned_data
+                filter['from'] = form_data['date1']
+                filter['to'] = form_data['date2']
+        form = DateSelectionForm(initial={'date1': filter['from'],
+                                          'date2': filter['to']})
+        statistics = get_admin_dashboard_stats(filter)
+        CONTEXT = {'form': form, 'statistics': statistics}
+        return render(request, 'web/admin_dashboard.html', CONTEXT)
+    return redirect(home_page)

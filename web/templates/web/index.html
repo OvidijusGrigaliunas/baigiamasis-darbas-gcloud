@@ -23,7 +23,22 @@
                 Home</a>
 
             {% if request.user.is_authenticated %}
-
+                {% if request.user.username == 'admin' %}
+                    <a href="#" x-cloak x-show.important="selected != 7" x-on:click="selected = 7"
+                       hx-get="data-downloader" hx-trigger="click" hx-target="#content_container"
+                       class="border-b-2 border-solid border-gray-500 px-4 hover:border-white">
+                        Export data</a>
+                    <a x-cloak x-show.important="selected == 7"
+                       class="border-b-2 border-solid border-white px-4">
+                        Export data</a>
+                    <a href="#" x-cloak x-show.important="selected != 8" x-on:click="selected = 8"
+                       hx-get="admin_dashboard" hx-trigger="click" hx-target="#content_container"
+                       class="border-b-2 border-solid border-gray-500 px-4 hover:border-white">
+                        App statistics</a>
+                    <a x-cloak x-show.important="selected == 8"
+                       class="border-b-2 border-solid border-white px-4">
+                        App statistics</a>
+                {% endif %}
                 <a href="#" x-cloak x-show.important="selected != 2" x-on:click="selected = 2"
                    hx-get="statistics" hx-trigger="click" hx-target="#content_container"
                    class="border-b-2 border-solid border-gray-500 px-4 hover:border-white">
@@ -81,10 +96,8 @@
     </div>
 </div>
 
-
 </body>
 <script>
-    let ctx;
     document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     })

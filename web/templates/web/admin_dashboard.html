@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="overflow-y-scroll flex h-screen w-full flex-row">
+    <div class="mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <form class="lg:mb-4 lg:px-8 lg:pb-8" hx-target="#content_container" hx-post="admin_dashboard">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="grid content-center lg:grid-cols-2 grid-cols-1 mx-auto">
+                        {% for field in form %}
+                            <div class="flex flex-col justify-center">
+                                <label class="mb-2 text-5xl text-gray-700  lg:text-lg">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input class="block lg:mt-4 mt-8 mx-auto rounded bg-blue-500 px-16 py-4 text-5xl font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none lg:px-4 lg:py-2 lg:text-lg"
+                           type="submit" value="Filter">
+                </fieldset>
+            </form>
+        </div>
+
+
+        <div class="container mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">Active users</h2>
+                <p class="text-3xl text-gray-700">{{ statistics.active_users }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">Total recordings</h2>
+                <p class="text-3xl text-gray-700">{{ statistics.recordings_made }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">Popular categories</h2>
+                <ol>
+                    {% for data in statistics.popular_categories %}
+                        <li>
+                            {{ data.0 }}: {{ data.1 }} total uses
+                        </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

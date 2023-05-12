@@ -1,115 +1,191 @@
 <div>
     <button hx-get="recordings/delete_record/{{ record_id }}/" hx-trigger="click" hx-target="#content_container"
             class="mt-8 rounded bg-blue-500 px-16 py-4 text-5xl font-bold text-white hover:bg-blue-700 focus:shadow-outline focus:outline-none lg:mt-4 lg:px-4 lg:py-2 lg:text-lg"
-    >Delete</button>
+    >Delete
+    </button>
     <div class="w-full lg:grid lg:grid-cols-2 lg:gap-2">
-        <div>
-            <h1>Accelerometer</h1>
-            <canvas id="accel_chart"></canvas>
-        </div>
-        <div><h1>Gyroscope</h1>
-            <canvas id="gyro_chart"></canvas>
-        </div>
-        <div><h1>Magnetometer</h1>
-            <canvas id="magnet_chart"></canvas>
-        </div>
+        {% if  source == 'phone' %}
+
+            <div>
+                <h1>Phone Accelerometer</h1>
+                <canvas id="accel_chart"></canvas>
+            </div>
+            <div>
+                <h1>Phone Gyroscope</h1>
+                <canvas id="gyro_chart"></canvas>
+            </div>
+            <div>
+                <h1>Phone Magnetometer</h1>
+                <canvas id="magnet_chart"></canvas>
+            </div>
+
+        {% else %}
+
+            <div>
+                <h1>Wearable Sensor Accelerometer</h1>
+                <canvas id="wear_accel_chart"></canvas>
+            </div>
+            <div>
+                <h1>Wearable Sensor Gyroscope</h1>
+                <canvas id="wear_gyro_chart"></canvas>
+            </div>
+            <div>
+                <h1>Wearable Sensor Magnetometer</h1>
+                <canvas id="wear_magnet_chart"></canvas>
+            </div>
+            <div>
+                <h1>Wearable Sensor Pressure</h1>
+                <canvas id="wear_press_chart"></canvas>
+            </div>
+            <div>
+                <h1>Wearable Sensor Temperature</h1>
+                <canvas id="wear_temp_chart"></canvas>
+            </div>
+
+        {% endif %}
     </div>
 
 </div>
 
 
 <script>
-    ctx1 = document.getElementById('accel_chart');
-    ctx2 = document.getElementById('gyro_chart');
-    ctx3 = document.getElementById('magnet_chart');
+    (() => {
+        let ctx = [];
+        let select_data = ['accel', 'gyro', 'magnet']
+        let interval = {{ interval }}/1000;
+        let data = {
+            'time_stamps': [],
+            'accel_x': [],
+            'accel_y': [],
+            'accel_z': [],
+            'gyro_x': [],
+            'gyro_y': [],
+            'gyro_z': [],
+            'magnet_x': [],
+            'magnet_y': [],
+            'magnet_z': [],
+            'temp': [],
+            'press': []
+        };
+        let i = 0;
+        {% if  source == 'phone' %}
+            {%for record in records%}
+                data['time_stamps'].push((interval * i).toFixed(1));
+                i++;
+                {% if record.accel_x %}
+                    data['accel_x'].push({{record.accel_x}});
+                    data['accel_y'].push({{record.accel_y}});
+                    data['accel_z'].push({{record.accel_z}});
+                {% endif %}
+                {% if record.gyro_x %}
+                    data['gyro_x'].push({{record.gyro_x}});
+                    data['gyro_y'].push({{record.gyro_y}});
+                    data['gyro_z'].push({{record.gyro_z}});
+                {% endif %}
+                {% if record.magnet_x %}
+                    data['magnet_x'].push({{record.magnet_x}});
+                    data['magnet_y'].push({{record.magnet_y}});
+                    data['magnet_z'].push({{record.magnet_z}});
+                {% endif %}
+            {%endfor%}
+            ctx[0] = document.getElementById('accel_chart');
+            ctx[1] = document.getElementById('gyro_chart');
+            ctx[2] = document.getElementById('magnet_chart');
+        {% else %}
+            {%for record in records%}
 
-    new Chart(ctx1, {
-        type: 'line',
-        data: {
-            labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
-            datasets: [{
-                label: 'x',
-                data: [{%for record in records%}'{{record.accel_x}}',{%endfor%}],
-                borderWidth: 1
-            },
-                {
-                    label: 'y',
-                    data: [{%for record in records%}'{{record.accel_y}}',{%endfor%}],
-                    borderWidth: 1
+                data['time_stamps'].push((interval * i).toFixed(1));
+                i++;
+                data['accel_x'].push({{record.accel_x}});
+                data['accel_y'].push({{record.accel_y}});
+                data['accel_z'].push({{record.accel_z}});
+                data['gyro_x'].push({{record.gyro_x}});
+                data['gyro_y'].push({{record.gyro_y}});
+                data['gyro_z'].push({{record.gyro_z}});
+                data['magnet_x'].push({{record.magnet_x}});
+                data['magnet_y'].push({{record.magnet_y}});
+                data['magnet_z'].push({{record.magnet_z}});
+                data['press'].push({{record.pressure}});
+                data['temp'].push({{record.temp}});
+            {%endfor%}
+            ctx[0] = document.getElementById('wear_accel_chart');
+            ctx[1] = document.getElementById('wear_gyro_chart');
+            ctx[2] = document.getElementById('wear_magnet_chart');
+            ctx[3] = document.getElementById('wear_press_chart');
+            ctx[4] = document.getElementById('wear_temp_chart');
+
+            new Chart(ctx[3], {
+                type: 'line',
+                data: {
+                    labels: data['time_stamps'],
+                    datasets: [{
+                        label: 'Pressure',
+                        data: data['press'],
+                        borderWidth: 1
+                    }]
                 },
-                {
-                    label: 'z',
-                    data: [{%for record in records%}'{{record.accel_z}}',{%endfor%}],
-                    borderWidth: 1
-                }]
-        },
-        options: {
-            responsive: true,
-            fill: false,
-            interaction: {
-                intersect: false
-            },
-            radius: 0,
-        }
-    });
-    new Chart(ctx2, {
-        type: 'line',
-        data: {
-            labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
-            datasets: [{
-                label: 'x',
-                data: [{%for record in records%}'{{record.gyro_x}}',{%endfor%}],
-                borderWidth: 1
-            },
-                {
-                    label: 'y',
-                    data: [{%for record in records%}'{{record.gyro_y}}',{%endfor%}],
-                    borderWidth: 1
+                options: {
+                    responsive: true,
+                    fill: false,
+                    interaction: {
+                        intersect: false
+                    },
+                    radius: 0,
+                }
+            });
+            new Chart(ctx[4], {
+                type: 'line',
+                data: {
+                    labels: data['time_stamps'],
+                    datasets: [{
+                        label: 'Temperature',
+                        data: data['temp'],
+                        borderWidth: 1
+                    }]
                 },
-                {
-                    label: 'z',
-                    data: [{%for record in records%}'{{record.gyro_z}}',{%endfor%}],
-                    borderWidth: 1
-                }]
-        },
-        options: {
-            responsive: true,
-            fill: false,
-            interaction: {
-                intersect: false
-            },
-            radius: 0,
-        }
-    });
-    new Chart(ctx3, {
-        type: 'line',
-        data: {
-            labels: [{%for record in records%}'{{record.time}}',{%endfor%}],
-            datasets: [{
-                label: 'x',
-                data: [{%for record in records%}'{{record.magnet_x}}',{%endfor%}],
-                borderWidth: 1
-            },
-                {
-                    label: 'y',
-                    data: [{%for record in records%}'{{record.magnet_y}}',{%endfor%}],
-                    borderWidth: 1
+                options: {
+                    responsive: true,
+                    fill: false,
+                    interaction: {
+                        intersect: false
+                    },
+                    radius: 0,
+                }
+            });
+        {% endif %}
+
+        for (let j = 0; j < 3; j++) {
+            new Chart(ctx[j], {
+                type: 'line',
+                data: {
+                    labels: data['time_stamps'],
+                    datasets: [{
+                        label: 'x',
+                        data: data[select_data[j] + '_x'],
+                        borderWidth: 1
+                    },
+                        {
+                            label: 'y',
+                            data: data[select_data[j] + '_y'],
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'z',
+                            data: data[select_data[j] + '_z'],
+                            borderWidth: 1
+                        }]
                 },
-                {
-                    label: 'z',
-                    data: [{%for record in records%}'{{record.magnet_z}}',{%endfor%}],
-                    borderWidth: 1
-                }]
-        },
-        options: {
-            responsive: true,
-            fill: false,
-            interaction: {
-                intersect: false
-            },
-            radius: 0,
+                options: {
+                    responsive: true,
+                    fill: false,
+                    interaction: {
+                        intersect: false
+                    },
+                    radius: 0,
+                }
+            });
         }
-    });
+    })();
 </script>
 
 

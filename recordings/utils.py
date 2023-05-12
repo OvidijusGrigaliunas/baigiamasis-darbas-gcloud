@@ -13,3 +13,5 @@ def get_accelerometer_speed(accel_data, time_step):
         accel_speed["y"].append(accel_speed["y"][-1] + (accel_data[i]["accel_y"] - g) * time_step)
         accel_speed["z"].append(accel_speed["z"][-1] + accel_data[i]["accel_z"] * time_step)
     return accel_speed
+
+

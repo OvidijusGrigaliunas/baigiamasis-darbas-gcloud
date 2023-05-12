@@ -42,3 +42,17 @@ class UserDataForm(forms.Form):
     birthdate = forms.CharField(label=mark_safe('<br /> Birthdate:'), widget=forms.DateInput(attrs={
         'class': tailwind_class
     }))
+
+
+class DateSelectionForm(forms.Form):
+    tailwind_class = """
+        block text-gray-700 text-5xl lg:text-lg font-bold mb-16 lg:mb-4
+    """
+    date1 = forms.DateField(label=mark_safe('<br /> From:'), widget=forms.DateInput(attrs={
+        'class': tailwind_class,
+        'type': 'date'
+    }))
+    date2 = forms.DateField(label=mark_safe('<br /> To:'), widget=forms.DateInput(attrs={
+        'class': tailwind_class,
+        'type': 'date'
+    }))

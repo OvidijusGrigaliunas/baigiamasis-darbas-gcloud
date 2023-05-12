@@ -34,8 +34,14 @@ def index(request):
 def record_data(request, record_id):
     recordings_data = Record_Data.objects.filter(record_id=record_id).values()
     data_interval = Record.objects.values('data_interval').get(id=record_id)['data_interval']
-    return render(request, 'recordings/record_data.html',
-                  {"records": recordings_data, "record_id": record_id, "interval": data_interval})
+    if recordings_data:
+        CONTEXT = {"records": recordings_data, 'source': 'phone', "record_id": record_id,
+                   "interval": data_interval}
+        return render(request, 'recordings/record_data.html', CONTEXT)
+    recordings_data = Record_Data_Extra.objects.filter(record_id=record_id).values()
+    CONTEXT = {"records": recordings_data, 'source': 'wearable', "record_id": record_id,
+               "interval": data_interval}
+    return render(request, 'recordings/record_data.html', CONTEXT)
 
 
 @login_required(login_url='')
@@ -45,28 +51,9 @@ def delete_record(request, record_id):
     record_user = User.objects.get(id=record.user_id)
     if user == record_user.user_id:
         Record_Data.objects.filter(record_id=record_id).delete()
+        Record_Data_Extra.objects.filter(record_id=record_id).delete()
         Record.objects.filter(id=record_id).delete()
     return redirect('/statistics')
-
-
-""" old version
-def record_data(request, record_id):
-    recordings_data = Record_Data.objects.filter(record_id=record_id).values()
-    data_interval = Record.objects.values('data_interval').get(id=record_id)['data_interval']
-    accelerometer_speed = get_accelerometer_speed(recordings_data.values("accel_x", "accel_y", "accel_z"),
-                                                  data_interval)
-    time_in_seconds = []
-    for i in range(1, len(accelerometer_speed['x'])):
-        time_in_seconds.append((i + 1) * data_interval / 1000)
-
-    formatted_data = []
-    for i in range(0, len(time_in_seconds) - 1):
-        formatted_data.append(
-            {"accel_x": accelerometer_speed["x"][i], "accel_y": round(accelerometer_speed["y"][i], 2),
-             "accel_z": round(accelerometer_speed["z"][i], 2), "time": time_in_seconds[i]})
-
-    return render(request, 'recordings/record_data.html', {"records": formatted_data})
-"""
 
 
 @api_view(['POST'])
@@ -96,7 +83,6 @@ def post_recording(request):
             recorded_data[n]['magnet'] = {'x': None, 'y': None, 'z': None}
 
     for data_row in recorded_data:
-        print(data_row)
         new_record_data = Record_Data(record=cur_record,
                                       accel_x=data_row['accel']['x'],
                                       accel_y=data_row['accel']['y'],

@@ -19,5 +19,4 @@ from . import views
 app_name = 'data_downloader'
 urlpatterns = [
     path('', views.index, name='data_download'),
-    path('data_download_url', views.data_download_url, name='download_data')
 ]
